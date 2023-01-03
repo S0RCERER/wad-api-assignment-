@@ -41,6 +41,17 @@ router.post('/',asyncHandler( async (req, res, next) => {
       }
   }));
 
+//Delete a favourite
+router.post('/:username/movie/:id/favourites', asyncHandler(async (req, res) => {
+  const newFavourite = req.params.id;
+  const userName = req.params.username;
+  const user = await User.findByUserName(userName);
+  const index = user.favourites.indexOf(newFavourite)
+  await user.favourites.splice(index, 1);
+  await user.save(); 
+  return res.status(201).json(user); 
+}));
+
 // Update a user
 router.put('/:id', async (req, res) => {
     if (req.body._id) delete req.body._id;
