@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/authContext";
 
@@ -18,9 +18,12 @@ function RegisterPage() {
       setRegistered(true);
     }
   }
-  if (registered) {
-    navigate("/")
-  }
+
+  useEffect(() => {
+    if (registered) {
+      navigate("/")
+    }
+  },  [registered,navigate])
 
   return (
     <div className="register">

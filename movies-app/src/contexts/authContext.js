@@ -1,5 +1,5 @@
 import React, { useState, createContext } from "react";
-import { login, signup, addFavourite } from "../api/tmdb-api";
+import { login, signup, addFavourite, getFavourites } from "../api/tmdb-api";
 
 export const AuthContext = createContext(null);
 
@@ -26,7 +26,6 @@ const AuthContextProvider = (props) => {
 
   const register = async (email, password) => {
     const result = await signup(email, password);
-    console.log(result.code);
     return (result.code == 201) ? true : false;
   };
 
@@ -34,6 +33,11 @@ const AuthContextProvider = (props) => {
     const result = await addFavourite(email, movieId)
     console.log(result.code);
     return (result.code == 200) ? true : false;
+  }
+
+  const getUserFavourites = async (email) => {
+    const result = await getFavourites(email)
+    return (result.code == 201) ? true : false;
   }
 
   const signout = () => {
@@ -48,6 +52,7 @@ const AuthContextProvider = (props) => {
         register,
         signout,
         addToFavorites,
+        getUserFavourites,
         userEmail
       }}
     >

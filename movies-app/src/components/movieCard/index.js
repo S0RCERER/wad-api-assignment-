@@ -17,10 +17,10 @@ import React, { useContext  } from "react";
 import { MoviesContext } from "../../contexts/moviesContext";
 
 export default function MovieCard({ movie, action }) {
-  const { favorites } = useContext(MoviesContext);
+  const { favourites } = useContext(MoviesContext);
   const { playlist } = useContext(MoviesContext);
        
-  if (favorites.find((id) => id === movie.id)) {
+  if (favourites.find((id) => id === movie.id)) {
     movie.favorite = true;
   } else {
     movie.favorite = false

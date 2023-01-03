@@ -14,10 +14,9 @@ export const getUpcomingMovies = () => {
         });
 };
 
-export const getMovie = (args) => {
-    console.log(args)
+export const getMovie = (id) => {
     return fetch(
-      `https://api.themoviedb.org/3/movie/${args}?api_key=${process.env.REACT_APP_TMDB_KEY}`
+      `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_TMDB_KEY}`
     ).then((response) => {
       if (!response.ok) {
         throw new Error(response.json().message);
