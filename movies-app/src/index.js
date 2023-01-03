@@ -5,6 +5,8 @@ import SiteHeader from './components/siteHeader'
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from 'react-query/devtools'
 import MoviesContextProvider from "./contexts/moviesContext";
+import AuthProvider from "./contexts/authContext";
+import ProtectedRoutes from "./protectedRoutes";
 const UpcomingMoviesPage = lazy(() => import("./pages/upcomingMoviesPage"));
 const HomePage = lazy(() => import("./pages/homePage"));
 const MoviePage = lazy(() => import("./pages/movieDetailsPage"));
@@ -32,12 +34,15 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+      <AuthProvider>
         <SiteHeader />
         <MoviesContextProvider>
         <Suspense fallback={<h1>Loading page</h1>}>
         <Routes>
         <Route path="/reviews/:id" element={ <MovieReviewPage /> } />
-          <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
+        <Route element={<ProtectedRoutes />}>
+            <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
+          </Route>
           <Route path="/movies/:id" element={<MoviePage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/movies/upcoming" element={ <UpcomingMoviesPage /> } />
@@ -50,6 +55,7 @@ const App = () => {
         </Routes>
         </Suspense>
         </MoviesContextProvider>
+        </AuthProvider>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -11,9 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { logout } from "../../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../firebase";
+import { AuthContext } from "../../contexts/authContext";
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
@@ -25,7 +23,7 @@ const SiteHeader = ( ) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const navigate = useNavigate();
-  const [user,] = useAuthState(auth);
+  const context = useContext(AuthContext);
   const menuOptions = [
     { label: "Home", path: "/" },
     { label: "Favorites", path: "/movies/favorites" },
@@ -41,7 +39,7 @@ const SiteHeader = ( ) => {
 
   const handleMenuSelect = (pageURL) => {
     if (pageURL === "/"){
-      logout()
+      context.signout();
     }
     navigate(pageURL, { replace: true });
   };
@@ -50,7 +48,6 @@ const SiteHeader = ( ) => {
     setAnchorEl(event.currentTarget);
   };
 
-  console.log(user)
 
   return (
     <>
@@ -60,13 +57,13 @@ const SiteHeader = ( ) => {
             TMDB Client
           </Typography>
           
-          {user==null?(
+          {!context.isAuthenticated?(
             <Typography variant="p" sx={{ flexGrow: 1 }}>
             Please Log In
           </Typography>
           ):
           ( <Typography variant="p" sx={{ flexGrow: 1 }} >
-          {user.email}
+          {context.userEmail}
           </Typography>)
           }
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
@@ -107,7 +104,7 @@ const SiteHeader = ( ) => {
                     </MenuItem>
                   ))}
 
-                    {user==null?(
+                    {!context.isAuthenticated?(
                   <MenuItem
                   key={menuUserOptions[1].label}
                   color="inherit"
@@ -140,7 +137,7 @@ const SiteHeader = ( ) => {
                   </Button>
                 ))}
 
-                    {user==null?(
+                    {!context.isAuthenticated?(
                   <Button
                   key={menuUserOptions[1].label}
                   color="inherit"
