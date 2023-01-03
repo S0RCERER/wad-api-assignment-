@@ -7,6 +7,7 @@ import './seedData';
 import usersRouter from './api/users';
 import session from 'express-session';
 import passport from './authenticate';
+import authenticate from './authenticate';
 
 dotenv.config();
 

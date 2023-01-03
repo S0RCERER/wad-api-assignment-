@@ -55,6 +55,15 @@ router.post('/:id/reviews', (req, res) => {
     }
 });
 
+router.get('/:id/favourites', async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+        res.status(200).json(user.favourites);
+    } else {
+        res.status(404).json({ code: 404, msg: 'Unable to find favourites' });
+    }
+});
+
 router.get('/tmdb/upcoming', asyncHandler( async(req, res) => {
     const upcomingMovies = await getUpcomingMovies();
     res.status(200).json(upcomingMovies);
