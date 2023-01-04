@@ -1,11 +1,10 @@
 import express from 'express';
-import Genre from './genreModel';
+import { getGenres } from '../tmdb/tmdb-api';
 
 const router = express.Router(); // eslint-disable-line
 
-// Get all genres
 router.get('/', async (req, res) => {
-    const genres = await Genre.find();
+    const genres = await getGenres();
     res.status(200).json(genres);
 });
 
