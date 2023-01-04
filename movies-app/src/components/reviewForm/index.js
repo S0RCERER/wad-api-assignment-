@@ -5,11 +5,12 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useForm, Controller } from "react-hook-form";
 import React, { useState, useContext } from "react";
-import { MoviesContext } from "../../contexts/moviesContext";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import { Paper } from "@mui/material";
+import { AuthContext } from "../../contexts/authContext";
+import { addReview } from "../../api/tmdb-api";
 
 const ratings = [
   {
@@ -62,10 +63,11 @@ const styles = {
 };
 
 const ReviewForm = ({ movie }) => {
-  const context = useContext(MoviesContext);
   const [rating, setRating] = useState(3);
   const [open, setOpen] = useState(false); 
   const navigate = useNavigate();
+  const userContext = useContext(AuthContext)
+  const userName = userContext.userEmail
   const defaultValues = {
     author: "",
     review: "",
@@ -85,10 +87,11 @@ const ReviewForm = ({ movie }) => {
   };
 
   const onSubmit = (review) => {
+    review.id = 
     review.movieId = movie.id;
     review.rating = rating;
-    // console.log(review);
-    context.addReview(movie, review);
+    review.author = userName;
+    addReview(userName, movie, review);
     setOpen(true); // NEW
   };
 
@@ -120,33 +123,7 @@ const ReviewForm = ({ movie }) => {
         </MuiAlert>
       </Snackbar>
       <form sx={styles.form} onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Controller
-          name="author"
-          control={control}
-          rules={{ required: "Name is required" }}
-          defaultValue=""
-          render={({ field: { onChange, value } }) => (
-            <TextField
-              sx={{ width: "40ch" }}
-              variant="outlined"
-              margin="normal"
-              required
-              onChange={onChange}
-              value={value}
-              id="author"
-              label="Author's name"
-              name="author"
-              autoFocus
-            />
-          )}
-        />
-        {errors.author && (
-          <Typography variant="h6" component="p">
-            {errors.author.message}
-          </Typography>
-        )}
-        <Controller
-          name="review"
+        name="content"
           control={control}
           rules={{
             required: "Review cannot be empty.",
@@ -159,11 +136,11 @@ const ReviewForm = ({ movie }) => {
               margin="normal"
               required
               fullWidth
-              name="review"
+              name="content"
               value={value}
               onChange={onChange}
               label="Review text"
-              id="review"
+              id="content"
               multiline
               minRows={10}
             />

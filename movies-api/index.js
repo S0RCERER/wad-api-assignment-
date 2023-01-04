@@ -9,6 +9,7 @@ import session from 'express-session';
 import passport from './authenticate';
 import authenticate from './authenticate';
 import actorsRouter from './api/actors';
+import reviewsRouter from './api/reviews';
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use('/api/genres', genresRouter);
 app.use('/api/actors', actorsRouter);
 app.use('/api/movies', moviesRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/reviews', reviewsRouter);
 app.use(errHandler);
 
 app.listen(port, () => {

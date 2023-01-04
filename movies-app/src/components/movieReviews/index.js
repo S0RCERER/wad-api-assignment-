@@ -32,7 +32,7 @@ export default function MovieReviews({ movie }) {
         </TableHead>
         <TableBody>
           {reviews.map((r) => (
-            <TableRow key={r.id}>
+            <TableRow key={r._id}>
               <TableCell component="th" scope="row">
                 {r.author}
               </TableCell>
