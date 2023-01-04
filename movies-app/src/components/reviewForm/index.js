@@ -145,7 +145,7 @@ const ReviewForm = ({ movie }) => {
               minRows={10}
             />
           )}
-        />
+        
         {errors.review && (
           <Typography variant="h6" component="p">
             {errors.review.message}
