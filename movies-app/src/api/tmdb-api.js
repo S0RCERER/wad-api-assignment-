@@ -1,7 +1,7 @@
 export const login = (username, password) => {
   return fetch('/api/users', {
       headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
       method: 'post',
       body: JSON.stringify({ username: username, password: password })
@@ -11,7 +11,7 @@ export const login = (username, password) => {
 export const signup = (username, password) => {
   return fetch('/api/users?action=register', {
       headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
       method: 'post',
       body: JSON.stringify({ username: username, password: password })
@@ -21,7 +21,7 @@ export const signup = (username, password) => {
 export const addFavourite = (username, id) => {
   return fetch(`/api/users/${username}/favourites`, {
     headers: {
-        'Content-Type': 'application/json'
+      'Content-Type': 'application/json'
     },
     method: 'post',
     body: JSON.stringify({ id })
@@ -31,19 +31,18 @@ export const addFavourite = (username, id) => {
 export const getFavourites = async (username) => {
   return fetch(`/api/users/${username}/favourites`, {
     headers: {
-        'Content-Type': 'application/json'
+      'Content-Type': 'application/json'
     },
     method: 'get'
   }).then(res => res.json())
 };
 
-export const deleteFavourite = (username, id) => {
-  return fetch(`/api/users/${username}/movie/${id}/favourites`, {
+export const deleteFavourite = (username, movie) => {
+  return fetch(`/api/users/${username}/movie/${movie.id}/favourites`, {
     headers: {
-        'Content-Type': 'application/json'
+      'Content-Type': 'application/json'
     },
-    method: 'post',
-    body: JSON.stringify({ id })
+    method: 'post'
   }).then(res => res.json())
 };
 
@@ -111,54 +110,41 @@ export const getMovies = ({queryKey}) => {
     });
   };
 
-  export const getUpcomingMovies = ({ queryKey }) => {
-    const [, pageNum] = queryKey;
+  export const getUpcomingMovies = (args) => {
+    const [, pageNum] = args.queryKey;
     const { page } = pageNum;
     return fetch(
-      `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=${page}`
-    ).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.json().message);
-      }
-      return response.json();
-    })
-    .catch((error) => {
-       throw error
+      `/api/movies/tmdb/upcoming/${page}`,
+    ).then(res => {
+       return res.json();
+    }).catch((error) => {
+       console.log(error);
     });
   };
 
   export const getMovie = (args) => {
-    // console.log(args)
     const [, idPart] = args.queryKey;
     const { id } = idPart;
     return fetch(
-      `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_TMDB_KEY}`
-    ).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.json().message);
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      throw error
-   });
+      `/api/movies/${id}`
+    ).then(res => {
+      return res.json();
+    }).catch((error) => {
+      console.log(error);
+    });
   };
 
- export const getTopRatedMovies = ({ queryKey }) => {
-  const [, pageNum] = queryKey;
-  const { page } = pageNum;
-  return fetch(
-    `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&include_adult=false&page=${page}`
-  ).then((response) => {
-    if (!response.ok) {
-      throw new Error(response.json().message);
-    }
-    return response.json();
-  })
-  .catch((error) => {
-     throw error
-  });
-};
+  export const getTopRatedMovies = ({ queryKey }) => {
+    const [, pageNum] = queryKey;
+    const { page } = pageNum;
+    return fetch(
+      `/api/movies/tmdb/topRated/${page}`,
+    ).then(res => {
+       return res.json();
+    }).catch((error) => {
+       console.log(error);
+    });
+  };
   
   export const getGenres = async () => {
     return fetch(
@@ -176,21 +162,16 @@ export const getMovies = ({queryKey}) => {
    });
   };
   
-  export const getMovieImages = ({ queryKey }) => {
-    const [, idPart] = queryKey;
+  export const getMovieImages = (args) => {
+    const [, idPart] = args.queryKey;
     const { id } = idPart;
     return fetch(
-      `https://api.themoviedb.org/3/movie/${id}/images?api_key=${process.env.REACT_APP_TMDB_KEY}`
-    ).then( (response) => {
-      if (!response.ok) {
-        throw new Error(response.json().message);
-      }
-      return response.json();
-  
-    })
-    .catch((error) => {
-      throw error
-   });
+      `/api/movies/tmdb/movie/${id}/images`
+    ).then(res => {
+      return res.json();
+    }).catch((error) => {
+      console.log(error);
+    });
   };
 
   export const getMovieReviews = (id) => {

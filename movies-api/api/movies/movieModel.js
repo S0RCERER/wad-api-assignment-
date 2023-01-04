@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { getMovie } from '../tmdb-api';
+import { getMovie } from '../tmdb/tmdb-api';
 
 const Schema = mongoose.Schema;
 
