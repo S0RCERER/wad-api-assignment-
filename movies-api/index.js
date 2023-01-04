@@ -8,6 +8,7 @@ import usersRouter from './api/users';
 import session from 'express-session';
 import passport from './authenticate';
 import authenticate from './authenticate';
+import actorsRouter from './api/actors';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use(passport.initialize());
 app.use('/api/genres', genresRouter);
+app.use('/api/actors', actorsRouter);
 app.use('/api/movies', moviesRouter);
 app.use('/api/users', usersRouter);
 app.use(errHandler);
